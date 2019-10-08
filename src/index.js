@@ -1,12 +1,11 @@
 const getCurrentSeconds = () => Math.trunc(new Date() / 1000);
-const fiveMinutes = 60 * 5;
 
-module.exports = () => {
+module.exports = (timeframe = 60 * 5) => {
   const counter = new Map();
   let lastCleanup = getCurrentSeconds();
 
   const cleanup = () => {
-    const secondsTo = getCurrentSeconds() - fiveMinutes - 2;
+    const secondsTo = getCurrentSeconds() - timeframe - 1;
     if (secondsTo > lastCleanup) {
       counter.forEach((_, timestamp) => {
         if (timestamp < secondsTo) {
@@ -18,7 +17,7 @@ module.exports = () => {
   };
 
 
-  const signal = () => {
+  const emit = () => {
     const seconds = getCurrentSeconds();
     if (counter.get(seconds)) {
       counter.set(seconds, counter.get(seconds) + 1);
@@ -29,7 +28,8 @@ module.exports = () => {
   };
 
   const getCount = (lastSeconds) => {
-    if (!lastSeconds && lastSeconds > fiveMinutes && lastSeconds < 1) {
+    if (!lastSeconds && lastSeconds < 1) {
+      // TODO:  <07-10-19, Vora, Deep> thow an error?
       return -1;
     }
 
@@ -46,5 +46,5 @@ module.exports = () => {
     return totalCount;
   };
 
-  return { signal, getCount };
+  return { emit, getCount };
 };
