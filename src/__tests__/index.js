@@ -87,7 +87,7 @@ describe('Event Counter test suite', () => {
   });
 
   describe('Cleanup tests', () => {
-    test('Should trigger cleanup for stale data', async () => {
+    test('Should return -1 as the count is past time frame, i.e stale data cannot be accessed', async () => {
       // reduced the time frame to tirgger clean up faster
       const ec = EventCounter(1);
 
@@ -99,7 +99,7 @@ describe('Event Counter test suite', () => {
       );
 
       // it would return 50 without the clean up
-      expect(ec.getCount(5)).toEqual(30);
+      expect(ec.getCount(5)).toEqual(-1);
     }, 10000);
   });
 });

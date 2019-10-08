@@ -49,7 +49,7 @@ module.exports = (timeframe = 60 * 5) => {
    * @param {int} lastSeconds - n previous seconds from now
    */
   const getCount = (lastSeconds) => {
-    if (!lastSeconds && lastSeconds < 1) {
+    if (!lastSeconds || lastSeconds > timeframe || lastSeconds < 1) {
       // TODO:  <07-10-19, Vora, Deep> thow an error?
       return -1;
     }
